@@ -65,15 +65,18 @@ export default function Home() {
       gridOffset.current.y = event.y - initialPosition.y;
 
       if (!canvasRef.current) return;
-
-      canvasRef.current.addEventListener('mouseup', (event: MouseEvent) => {
-        if (!canvasRef.current) return;
-
-        canvasRef.current.removeEventListener('mousemove', moveEvent);
-      });
     };
 
     canvasRef.current.addEventListener('mousemove', moveEvent);
+
+    const mouseUpEvent = () => {
+      if (!canvasRef.current) return;
+
+      canvasRef.current.removeEventListener('mousemove', moveEvent);
+      canvasRef.current.removeEventListener('mouseup', mouseUpEvent);
+    };
+
+    canvasRef.current.addEventListener('mouseup', mouseUpEvent);
   };
 
   useEffect(() => {
